@@ -29,6 +29,10 @@ This style guide is based on the structure provided by @fat in [Medium's Style G
   - [Font Weight](#font-weight)
   - [Line Height](#line-height)
   - [Letter spacing](#letter-spacing)
+- [Units](#units)
+  - [Percents](#percents)
+  - [`em`s](#ems)
+  - [`height`](#height)
 - [Vendor Prefixes](#vendor-prefixes)
 - [Formatting](#formatting)
   - [Spacing](#spacing)
@@ -297,7 +301,22 @@ Letter spacing should also be controlled with the following var scale.
 @letterSpacing-normal
 @letterSpacing-loose
 @letterSpacing-looser
-````
+```
+
+## Units
+
+The web should be fluid by default. Locking your layout to specific sizes will make this goal harder. So, use units that allow fluidity.
+
+### Percents
+Unless dealing directly with fonts or media quires, `%` is usually the best unit to use. `vw` and `vh` are also very handy.
+
+### `em`s
+Always prefer using `em` over `px`. This allows your layout to adapt to font-size changes smoothly.
+
+This is especially true when setting `width`, `font-size`, `padding`, and `margin`.
+
+### `height`
+Use `height` with caution. Pages are layed out horizontally, limiting your height will nearly always lead to problems.
 
 ## Vendor Prefixes [vendor-prefixes]
 
