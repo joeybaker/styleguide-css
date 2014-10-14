@@ -54,6 +54,10 @@ It's better to use `data` attributes than classes because datalist is easier to 
 <a href="/login" class="btn btn-primary" data-js="login"></a>
 ```
 
+```js
+$('[data-js="login"]').on('click', onClick)
+```
+
 **Again, JavaScript-specific data attributes should not, under any circumstances, be styled.**
 
 ## Utilities
