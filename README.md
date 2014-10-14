@@ -22,7 +22,7 @@ This style guide is based on the structure provided by @fat in [Medium's Style G
   - [ComponentName](#componentname)
   - [componentName--modifierName](#componentname--modifiername)
   - [componentName-descendantName](#componentname-descendantname)
-  - [componentName.is-stateOfComponent](#componentname.is-stateofcomponent)
+  - [componentName.is-stateOfComponent](#componentnameis-stateofcomponent)
 - [Variables](#variables)
   - [Colors](#colors)
   - [z-index scale](#z-index)
@@ -44,15 +44,17 @@ This style guide is based on the structure provided by @fat in [Medium's Style G
 
 ## JavaScript
 
-syntax: `js-<targetName>`
+syntax: `data-js="<targetName>"`
 
-JavaScript-specific classes reduce the risk that changing the structure or theme of components will inadvertently affect any required JavaScript behaviour and complex functionality. It is not neccesarry to use them in every case, just think of them as a tool in your utility belt. If you are creating a class, which you dont intend to use for styling, but instead only as a selector in JavaScript, you should probably be adding the `js-` prefix. In practice this looks like this:
+Provide a clean separation of styles and JavaScript-specific points in the DOM to reduce the risk that changing the structure or theme of components will inadvertently affect any required JavaScript behaviour and complex functionality. It is not neccesarry to use them in every case, just think of them as a tool in your utility belt.
+
+It's better to use `data` attributes than classes because datalist is easier to manipulate and it provides a very obvious differentation of styles vs JS hooks. In practice this looks like this:
 
 ```html
-<a href="/login" class="btn btn-primary js-login"></a>
+<a href="/login" class="btn btn-primary" data-js="login"></a>
 ```
 
-**Again, JavaScript-specific classes should not, under any circumstances, be styled.**
+**Again, JavaScript-specific data attributes should not, under any circumstances, be styled.**
 
 ## Utilities
 
