@@ -22,7 +22,7 @@ This style guide is based on the structure provided by @fat in [Medium's Style G
   - [ComponentName](#componentname)
   - [componentName--modifierName](#componentname--modifiername)
   - [componentName-descendantName](#componentname-descendantname)
-  - [componentName.is-stateOfComponent](#componentnameis-stateofcomponent)
+  - [componentName.is-stateOfComponent and aria-*](#componentnameis-stateofcomponent-and-aria-)
 - [Variables](#variables)
   - [Colors](#colors)
   - [z-index scale](#z-index)
@@ -135,6 +135,7 @@ A component modifier is a class that modifies the presentation of the base compo
 ```html
 <button class="btn btn--primary">…</button>
 ```
+
 ### componentName-descendantName
 
 A component descendant is a class that is attached to a descendant node of a component. It's responsible for applying presentation directly to the descendant on behalf of a particular component. Descendant names must be written in camel case.
@@ -148,6 +149,65 @@ A component descendant is a class that is attached to a descendant node of a com
   <div class="tweet-body">
     …
   </div>
+</article>
+```
+
+### componentName.is-stateOfComponent and aria-*
+
+It's best to use aria attributes instead of separate classes. Here's a list of aria states that you can use [via](http://slides.com/heydon/getting-nowhere-with-css-best-practices/#/41):
+
+```
+aria-busy
+aria-grabbed
+aria-invalid
+aria-checked
+aria-disabled
+aria-expanded
+aria-hidden
+aria-invalid
+aria-pressed
+aria-selected
+```
+
+If none of these states match, use `is-stateName` for state-based modifications of components. The state name must be Camel case. **Never style these classes directly; they should always be used as an adjoining class.**
+
+JS can add/remove these classes. This means that the same state names can be used in multiple contexts, but every component must define its own styles for the state (as they are scoped to the component).
+
+#### Right
+```css
+.tweet {
+    display: none;
+    background: rgb(0,0,0);
+    font-size: 1rem;
+    /* etc… */
+}
+.tweet[aria-expanded] {
+    display: block;
+}
+```
+
+```html
+<article class="tweet" aria-expanded>
+  …
+</article>
+```
+
+#### Less Right
+```css
+.tweet {
+    display: none;
+}
+.tweet.is-expanded {
+    display: block;
+    background: rgb(0,0,0);
+    font-size: 1rem;
+    /* etc… */
+}
+```
+
+```html
+<article class="tweet is-expanded">
+  …
 </article>
 ```
 
