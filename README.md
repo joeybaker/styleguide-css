@@ -145,50 +145,6 @@ A component descendant is a class that is attached to a descendant node of a com
 </article>
 ```
 
-### componentName.is-stateOfComponent
-
-Use `is-stateName` for state-based modifications of components. The state name must be Camel case. **Never style these classes directly; they should always be used as an adjoining class.**
-
-JS can add/remove these classes. This means that the same state names can be used in multiple contexts, but every component must define its own styles for the state (as they are scoped to the component).
-
-#### Right
-```css
-.tweet {
-    display: none;
-    background: rgb(0,0,0);
-    font-size: 1rem;
-    /* etc… */
-}
-.tweet.is-expanded {
-    display: block;
-}
-```
-
-```html
-<article class="tweet is-expanded">
-  …
-</article>
-```
-
-#### Wrong
-```css
-.tweet {
-    display: none;
-}
-.tweet.is-expanded {
-    display: block;
-    background: rgb(0,0,0);
-    font-size: 1rem;
-    /* etc… */
-}
-```
-
-```html
-<article class="tweet is-expanded">
-  …
-</article>
-```
-
 ## Variables
 
 Syntax: `<property>-<value>[--componentName]`
