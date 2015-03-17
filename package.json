@@ -5,7 +5,7 @@
   "main": " ",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "doctoc": "doctoc README.md --maxlevel 3 && if [ -f CONTRIBUTING.md ]; then doctoc CONTRIBUTING.md --maxlevel 3 ; fi && if [[ $(git diff --shortstat 2> /dev/null | tail -n1) != '' ]]; then git add README.md CONTRIBUTING.md && git commit --no-verify -m'table of contents update'; fi"
+    "doctoc": "doctoc README.md --maxlevel 3 && if [ -f CONTRIBUTING.md ]; then doctoc CONTRIBUTING.md --maxlevel 3; fi && if [[ $(git diff --shortstat 2> /dev/null | tail -n1) != '' ]]; then git add README.md; if [ -f CONTRIBUTING.md ]; then git add CONTRIBUTING.md; fi; git commit --no-verify -m'table of contents update'; fi"
   },
   "config": {
     "notes": "important to correct the path of npm so that the git hook doesn't error",
