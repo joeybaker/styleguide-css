@@ -25,7 +25,7 @@ This style guide is based on the structure provided by @fat in [Medium's Style G
   - [ComponentName](#componentname)
   - [componentName--modifierName](#componentname--modifiername)
   - [componentName-descendantName](#componentname-descendantname)
-  - [componentName.is-stateOfComponent and aria-*](#componentnameis-stateofcomponent-and-aria-)
+  - [aria-*](#aria-)
 - [`id` attribute](#id-attribute)
   - [Tag Names](#tag-names)
 - [Selectors and Nesting](#selectors-and-nesting)
