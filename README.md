@@ -12,35 +12,60 @@ Naming conventions are adapted from the work being done in the SUIT CSS framewor
 
 This style guide is based on the structure provided by @fat in [Medium's Style Guide](https://gist.github.com/fat/a47b882eb5f84293c4ed).
 
-## Table of Contents
-<!-- MarkdownTOC -->
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
+- [Organization](#organization)
 - [JavaScript](#javascript)
 - [Utilities](#utilities)
   - [u-utilityName](#u-utilityname)
 - [Components](#components)
+  - [Namespaces](#namespaces)
   - [ComponentName](#componentname)
   - [componentName--modifierName](#componentname--modifiername)
   - [componentName-descendantName](#componentname-descendantname)
   - [componentName.is-stateOfComponent and aria-*](#componentnameis-stateofcomponent-and-aria-)
+- [`id` attribute](#id-attribute)
+  - [Tag Names](#tag-names)
+- [Selectors and Nesting](#selectors-and-nesting)
 - [Variables](#variables)
   - [Colors](#colors)
-  - [z-index scale](#z-index)
-  - [Font Weight](#font-weight)
-  - [Line Height](#line-height)
-  - [Letter spacing](#letter-spacing)
+  - [z-index scale [z-index]](#z-index-scale-z-index)
+  - [Font Weight [font-weight]](#font-weight-font-weight)
+  - [Line Height [line-height]](#line-height-line-height)
+  - [Letter spacing [letter-spacing]](#letter-spacing-letter-spacing)
 - [Units](#units)
   - [Percents](#percents)
   - [`em`s](#ems)
   - [`height`](#height)
-- [Vendor Prefixes](#vendor-prefixes)
+- [Vendor Prefixes [vendor-prefixes]](#vendor-prefixes-vendor-prefixes)
 - [Formatting](#formatting)
   - [Spacing](#spacing)
   - [Quotes](#quotes)
 - [Performance](#performance)
   - [Specificity](#specificity)
+- [Presentation-Specific vs Layout-Specific Styles](#presentation-specific-vs-layout-specific-styles)
+- [Styles](#styles)
+- [Media Queries](#media-queries)
+- [Frameworks and Vendor Styles](#frameworks-and-vendor-styles)
+- [Languages](#languages)
+- [Credits](#credits)
 
-<!-- /MarkdownTOC -->
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+## Organization
+
+Each component should have it's own style sheet. Even global styles get a component. CSS-only components are okay!
+
+- Use a single `all.{styl,less,scss}` file and have it `@import` every other file
+- Use a build tool to glob the styles directory
+
+A few rules apply.
+
+- Each component should take up its own file
+- Styles applied globally to tag names, see [Tag Names](#tag-names), should be kept in a single file
+- Where possible split **presentation-specific** styles from **layout-specific** styles. See below
 
 ## JavaScript
 
@@ -106,9 +131,58 @@ Component driven development offers several benefits when reading and writing HT
 You can think of components as custom elements that enclose specific semantics, styling, and behaviour.
 
 
+### Namespaces
+
+Components should _always_ be assigned a unique namespace prefix.
+
+- The namespace can be as short as a single character, or as long as 5 characters
+- Where possible, the namespace should be a meaningful shorthand
+- In class names, the namespace must be followed by a single dash
+- Views should be treated as individual components
+
+Consider the following example, where we assigned `ddl` to a **drop down list** component. Take note of the class names.
+
+##### Good
+
+```css
+.ddl-container {
+  // ...
+}
+
+.ddl-item-list {
+  // ...
+}
+
+.ddl-item {
+  // ...
+}
+```
+
+##### Bad
+
+```css
+.item-list {
+  // ...
+}
+
+.dropdown-item-list {
+  // ...
+}
+
+.xyz-item-list {
+  // ...
+}
+```
+
+See [Selectors and Nesting](#selectors-and-nesting) for information in regard to how styles should be overridden
+
 ### ComponentName
 
-The component's name must be written in camel case.
+* The component's name must be written in camel case.
+* As short as possible, but as long as necessary
+  * _Don't abbreviate words carelessly_
+* Name things consistently
+* Meaningful description of the elements that should use it
 
 ```css
 .myComponent { /* … */ }
@@ -209,6 +283,145 @@ JS can add/remove these classes. This means that the same state names can be use
 <article class="tweet is-expanded">
   …
 </article>
+```
+
+## `id` attribute
+
+While the `id` attribute might be fine in HTML and JavaScript, it should be **avoided entirely** inside stylesheets. Few reasons.
+
+- ID selectors are not reusable
+- Priority nightmares
+- [“Bad Code”, Dogmatism, etc.][1]
+
+##### Good
+
+```css
+.ur-name {
+  // ...
+}
+```
+
+##### Bad
+
+```css
+#ur-name {
+  // ...
+}
+```
+
+Just assign a class name to the element.
+
+### Tag Names
+
+Tag names in selectors follow a few rules.
+
+- Application level styles that are only overridden in a few places are okay to use tag name selectors
+- [Not semantic][2]. **Avoid where possible**, use class names instead
+- Fine to use when there's a ton of elements under the same namespace that need a small tweak
+- **Don't overqualify** _(`a.foo`)_
+
+##### Good
+
+```css
+button {
+  padding: 5px;
+  margin-right: 3px;
+}
+
+.ddl-button {
+  background-color: #f00;
+}
+```
+
+##### Bad
+
+```css
+.ddl-container button {
+  background-color: #f00;
+}
+```
+
+## Selectors and Nesting
+
+Styles shouldn't need to be nested more than three _(four at worst)_ levels deep. This includes pseudo-selectors. If you find yourself going further, think about re-organizing your rules _(either the specificity needed, or the layout of the nesting)_.
+
+##### Good
+
+```css
+.sg-title-icon:before {
+  // ...
+}
+
+.dg-container .sg-title {
+  font-size: 1.1em; // larger segment title inside dialogs
+}
+```
+
+##### Bad
+
+```css
+.dg-container .sg-container .sg-title {
+  font-size: 1.1em;
+}
+
+.dg-container .sg-title span:before {
+  // ...
+}
+```
+
+If a component needs to be different within another component, these rules apply.
+
+- Where possible, give a class name using the parent namespace to the child component
+- If that's not possible, then use a nested selector
+
+Suppose you have a User List component `.ul-*` and a User Card component `.uc-*`.
+
+##### Good
+
+```html
+<div class='ul-container'>
+  <div class='uc-container'>
+    <span class='uc-name ul-card-name'>John Doe</span>
+  </div>
+</div>
+```
+
+```css
+.ul-card-name {
+  // ...
+}
+```
+
+##### Okay
+
+```html
+<div class='ul-container'>
+  <div class='uc-container'>
+    <span class='uc-name'>John Doe</span>
+  </div>
+</div>
+```
+
+```css
+.ul-container .uc-name {
+  // ...
+}
+```
+
+##### Bad
+
+```html
+<div class='ul-container'>
+  <div class='uc-container'>
+    <span class='uc-name uc-name-in-ul'>John Doe</span>
+  </div>
+</div>
+```
+
+```css
+.uc-name-in-ul {
+  // ...
+}
 ```
 
 ## Variables
@@ -350,7 +563,7 @@ The following are some high level page formatting style rules.
 
 ### Spacing
 
-CSS rules should be comma seperated but live on new lines:
+CSS rules should be comma separated but live on new lines:
 
 **Right:**
 ```css
@@ -367,7 +580,7 @@ CSS rules should be comma seperated but live on new lines:
 }
 ```
 
-CSS blocks should be seperated by a single line. This is to allow users to jump between styles in the same way they jump between paragraphs.
+CSS blocks should be separated by a single line. This is to allow users to jump between styles in the same way they jump between paragraphs.
 
 **Right:**
 ```css
@@ -434,3 +647,219 @@ If we want to only style specific `a` elements inside `.user-list` we can give t
   color: red;
 }
 ```
+
+## Presentation-Specific vs Layout-Specific Styles
+
+Presentation-Specific styles are those that **only alter the visual design** of the element, but don't change its dimensions or position in a meaningful way. The examples below are presentation-specific.
+
+- Rules such as `color`, `font-weight`, or `font-variant`
+- Rules that animate other properties
+- `font-size` is not considered a meaningful dimension change
+- `max-width` and `max-height` may fit either category, but it's generally reasonable to consider them presentation-specific
+
+Layout-Specific Styles are those that change the dimensions or positioning of DOM elements. These are mostly layout-specific.
+
+- Rules such as `margin` or `padding`
+- `width`, and `height`
+- The element's `position`
+- `z-index`, definitely
+
+Where possible, it's suggested to explicitly split styles into these two categories. The explicit differentiation could be made in a few different ways.
+
+- _(bad)_ No differentiation
+- _(decent)_ Layout-specific first, presentation-specific later
+- _(good)_ A line-break between both categories
+- _(better)_ Split in subsequent style declarations using the same selector
+
+##### Good
+
+```css
+.foo {
+  position: fixed;
+  top: 8px;
+  right: 8px;
+  padding: 2px;
+  font-weight: bold;
+  background-color: #333;
+  color: #f00;
+}
+```
+
+```css
+.foo {
+  position: fixed;
+  top: 8px;
+  right: 8px;
+  padding: 2px;
+
+  font-weight: bold;
+  background-color: #333;
+  color: #f00;
+}
+```
+
+##### Bad
+
+```css
+.foo {
+  font-weight: bold;
+  background-color: #333;
+  color: #f00;
+  position: fixed;
+  top: 8px;
+  right: 8px;
+  padding: 2px;
+}
+
+.foo {
+  right: 8px;
+  color: #f00;
+  padding: 2px;
+  top: 8px;
+  background-color: #333;
+  font-weight: bold;
+  position: fixed;
+}
+```
+
+## Styles
+
+These rules apply to your CSS property values
+
+- If the value of a property is `0`, do not specify units
+- The `!important` rule should be aggressively avoided.
+  - Keep style rules in a sensible order
+  - Compose styles to dissipate the need for an `!important` rule
+  - Fine to use in limited cases
+    - Overlays
+    - Declarations of the `display: none !important;` type
+- Keep `z-index` levels in variables in a single file. **Avoids confusion** about what level should be given to an element, and arbitrarily-high `999`-style values
+- Dislike magic numbers, use variables. Prefer global vars over component-specific vars.
+- Avoid mixing units, unless in `calc`
+- Prefer `rgb` over `rgba` over hex.
+- Unit-less `line-height` is preferred because it does not inherit a percentage value of its parent element, but instead is based on a multiplier of the `font-size`.
+
+##### Good
+
+```css
+.btn {
+  color: #222;
+}
+
+.btn-red {
+  color: #f00;
+}
+```
+
+##### Bad
+
+```css
+.btn-red {
+  color: #f00 !important;
+}
+
+.btn {
+  color: #222;
+}
+```
+
+## Media Queries
+
+> If you are reading this, I salute you. You're _almost as boring_ as I am. I'm more boring because **I actually wrote the damn thing**. It's not a contest, though.
+
+A few rules apply to media queries.
+
+- Settle for a few _(2-3)_ breakpoints and use those only
+- Don't wrap entire stylesheets in media queries
+- Approach your styles in a [Mobile First][5] manner. Generally you add more things as you get more real state. **Mobile First** logically follows
+
+##### Good
+
+```css
+.co-field {
+  width: 120px;
+}
+
+@media only screen and (min-width: 768px) {
+  .co-field {
+    width: 400px;
+    color: #f00;
+  }
+}
+```
+
+##### Bad
+
+```css
+.co-field {
+  width: 400px;
+  color: #f00;
+}
+
+@media only screen and (max-width: 768px) {
+  .co-field {
+    width: 120px;
+    color: initial;
+  }
+}
+```
+
+## Frameworks and Vendor Styles
+
+You should shy away from all of these. A few rules apply.
+
+- **Stay away from frameworks**
+- Use [`normalize.css`][4] if you want
+- Vendor styles, such as those required by external components are okay, and they should come before you define any of your own styles
+
+## Languages
+
+Some rules apply to stylesheet, regardless of language.
+
+- Use a pre-processor language where possible. Rework is probably the best.
+- Use soft-tabs with a two space indent
+- One line per selector
+- One _(or more)_ line(s) per property declaration
+  - Long, comma-separated property values _(such as collections of gradients or shadows)_ can be arranged across multiple lines in an effort to improve readability and produce more useful diffs.
+- Comments that refer to selector blocks should be on a separate line immediately before the block to which they refer
+- Use a plugin such as **EditorConfig** to get rid of trailing spaces
+
+##### Good
+
+```css
+.foo {
+  color: #f00;
+}
+
+.foo
+, .bar
+, .baz {
+  color: #f00;
+}
+```
+
+##### Bad
+
+```css
+.foo {
+    color: #foo;
+}
+
+.foo, .bar, .baz {
+  color: #f00;
+}
+
+.foo {
+  color: red;
+}
+```
+
+## Credits
+Some ideas from [bevacqua](https://github.com/bevacqua/css) and @fat in [Medium's Style Guide](https://gist.github.com/fat/a47b882eb5f84293c4ed).
+
+[1]: http://css-tricks.com/bad-code-dogmatism-etc/ "Bad Code, Dogmatism, etc"
+[2]: http://smacss.com/ "SMACSS modular CSS architecture"
+[3]: https://github.com/bevacqua/css/issues "bevacqua/css Issues on GitHub"
+[4]: http://necolas.github.io/normalize.css/ "A modern, HTML5-ready alternative to CSS resets"
+[5]: http://bradfrostweb.com/blog/mobile/the-many-faces-of-mobile-first/ "The Many Faces of Mobile First"
+[6]: https://github.com/bevacqua/js
