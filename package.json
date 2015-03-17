@@ -1,0 +1,34 @@
+{
+  "name": "styleguide-css",
+  "version": "0.0.0",
+  "description": "Pre-processors are great, but with [atomify](https://github.com/atomify/atomify)'s use of [rework](https://github.com/reworkcss/rework), we can use regular old CSS, but still get the best of preprocessors.",
+  "main": " ",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "doctoc": "doctoc README.md --maxlevel 3 && if [ -f CONTRIBUTING.md ]; then doctoc CONTRIBUTING.md --maxlevel 3 ; fi && if [[ $(git diff --shortstat 2> /dev/null | tail -n1) != '' ]]; then git add README.md CONTRIBUTING.md && git commit --no-verify -m'table of contents update'; fi"
+  },
+  "config": {
+    "notes": "important to correct the path of npm so that the git hook doesn't error",
+    "ghooks": {
+      "pre-push": "PATH=$PATH:/usr/local/bin:/usr/local/sbin && npm run doctoc"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/joeybaker/styleguide-css.git"
+  },
+  "keywords": [
+    "styleguide",
+    "css"
+  ],
+  "author": "Joey Baker <joey@byjoeybaker.com> (https://byjoeybaker.com)",
+  "license": "Artistic-2.0",
+  "bugs": {
+    "url": "https://github.com/joeybaker/styleguide-css/issues"
+  },
+  "homepage": "https://github.com/joeybaker/styleguide-css",
+  "devDependencies": {
+    "doctoc": "^0.12.0",
+    "ghooks": "^0.2.5"
+  }
+}
