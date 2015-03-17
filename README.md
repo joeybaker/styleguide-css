@@ -226,7 +226,7 @@ A component descendant is a class that is attached to a descendant node of a com
 </article>
 ```
 
-### componentName.is-stateOfComponent and aria-*
+### aria-*
 
 It's best to use aria attributes instead of separate classes. Here's a list of aria states that you can use [via](http://slides.com/heydon/getting-nowhere-with-css-best-practices/#/41):
 
@@ -243,9 +243,7 @@ aria-pressed
 aria-selected
 ```
 
-If none of these states match, use `is-stateName` for state-based modifications of components. The state name must be Camel case. **Never style these classes directly; they should always be used as an adjoining class.**
-
-JS can add/remove these classes. This means that the same state names can be used in multiple contexts, but every component must define its own styles for the state (as they are scoped to the component).
+JS can add/remove these attrs. This means that the same state names can be used in multiple contexts, but every component must define its own styles for the state (as they are scoped to the component).
 
 #### Right
 ```css
@@ -266,7 +264,7 @@ JS can add/remove these classes. This means that the same state names can be use
 </article>
 ```
 
-#### Less Right
+#### Wrong
 ```css
 .tweet {
     display: none;
