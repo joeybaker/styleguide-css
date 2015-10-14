@@ -15,14 +15,8 @@ This style guide is based on the structure provided by @fat in [Medium's Style G
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Organization](#organization)
-- [JavaScript](#javascript)
-- [Utilities](#utilities)
-  - [u-utilityName](#u-utilityname)
 - [Components](#components)
   - [Namespaces](#namespaces)
-  - [ComponentName](#componentname)
-  - [componentName--modifierName](#componentname--modifiername)
-  - [componentName-descendantName](#componentname-descendantname)
   - [aria-*](#aria-)
 - [`id` attribute](#id-attribute)
   - [Tag Names](#tag-names)
