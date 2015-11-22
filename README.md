@@ -1,11 +1,9 @@
 # CSS Coding Guidelines
 
-Pre-processors are great, but with [atomify](https://github.com/atomify/atomify)'s use of [rework](https://github.com/reworkcss/rework), we can use regular old CSS, but still get the best of preprocessors.
-
 The core philosophy here:
 
 * variables are amazing!
-* mixins can be really useful
+* composing classes is really useful
 * nesting is actually an anti-pattern that leads to selector over-specificity.
 
 Naming conventions are adapted from the work being done in the SUIT CSS framework. Which is to say, it relies on _structured class names_ and _meaningful hyphens_ (i.e., not using hyphens merely to separate words). This is to help work around the current limits of applying CSS to the DOM (i.e., the lack of style encapsulation) and to better communicate the relationships between classes.
@@ -17,14 +15,8 @@ This style guide is based on the structure provided by @fat in [Medium's Style G
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
 - [Organization](#organization)
-- [JavaScript](#javascript)
-- [Utilities](#utilities)
-  - [u-utilityName](#u-utilityname)
 - [Components](#components)
   - [Namespaces](#namespaces)
-  - [ComponentName](#componentname)
-  - [componentName--modifierName](#componentname--modifiername)
-  - [componentName-descendantName](#componentname-descendantname)
   - [aria-*](#aria-)
 - [`id` attribute](#id-attribute)
   - [Tag Names](#tag-names)
@@ -56,71 +48,15 @@ This style guide is based on the structure provided by @fat in [Medium's Style G
 
 ## Organization
 
-Each component should have it's own style sheet. Even global styles get a component. CSS-only components are okay!
+Each component should have it's own style sheet. Components **MUST NOT** be styled by other components. This constraint ensures isolation. It's okay to compose from style sheets that are shared across multiple components and setup shared styles.
 
-- Use a single `all.{styl,less,scss}` file and have it `@import` every other file
-- Use a build tool to glob the styles directory
-
-A few rules apply.
-
-- Each component should take up its own file
-- Styles applied globally to tag names, see [Tag Names](#tag-names), should be kept in a single file
-- Where possible split **presentation-specific** styles from **layout-specific** styles. See below
-
-## JavaScript
-
-syntax: `data-js="<targetName>"`
-
-Provide a clean separation of styles and JavaScript-specific points in the DOM to reduce the risk that changing the structure or theme of components will inadvertently affect any required JavaScript behaviour and complex functionality. It is not neccesarry to use them in every case, just think of them as a tool in your utility belt.
-
-It's better to use `data` attributes than classes because datalist is easier to manipulate and it provides a very obvious differentation of styles vs JS hooks. In practice this looks like this:
-
-```html
-<a href="/login" class="btn btn-primary" data-js="login"></a>
-```
-
-```js
-$('[data-js="login"]').on('click', onClick)
-```
-
-**Again, JavaScript-specific data attributes should not, under any circumstances, be styled.**
-
-## Utilities
-
-Utility classes are low-level structural and positional traits. Utilities can be applied directly to any element; multiple utilities can be used together; and utilities can be used alongside component classes.
-
-Utilities exist because certain CSS properties and patterns are used frequently. For example: floats, containing floats, vertical alignment, text truncation. Relying on utilities can help to reduce repetition and provide consistent implementations. They also act as a philosophical alternative to functional (i.e. non-polyfill) mixins.
-
-
-```html
-<div class="u-clearfix">
-  <p class="u-textTruncate">{$text}</p>
-  <img class="u-pullLeft" src="{$src}" alt="">
-  <img class="u-pullLeft" src="{$src}" alt="">
-  <img class="u-pullLeft" src="{$src}" alt="">
-</div>
-```
-
-### u-utilityName
-
-Syntax: `u-<utilityName>`
-
-Utilities must use a camel case name, prefixed with a `u` namespace. What follows is an example of how various utilities can be used to create a simple structure within a component.
-
-```html
-<div class="u-clearfix">
-  <a class="u-pullLeft" href="{$url}">
-    <img class="u-block" src="{$src}" alt="">
-  </a>
-  <p class="u-sizeFill u-textBreak">
-    …
-  </p>
-</div>
-```
+- Each component **MUST** `import` it's CSS in it's JS
+- Styles applied globally to tag names, see [Tag Names](#tag-names), should be kept in a file named for what they're affecting. e.g. `typography` or `layout`
+- Where possible split _presentation-specific_ styles from _layout-specific_ styles. See below.
 
 ## Components
 
-Syntax: `<componentName>[--modifierName|-descendantName]`
+With CSS Modules, you're forced to develop in components. Classes are automatically namespaced for you.
 
 Component driven development offers several benefits when reading and writing HTML and CSS:
 
@@ -128,17 +64,12 @@ Component driven development offers several benefits when reading and writing HT
 * It keeps the specificity of selectors low.
 * It helps to decouple presentation semantics from document semantics.
 
-You can think of components as custom elements that enclose specific semantics, styling, and behaviour.
+You can think of components as custom elements that enclose specific semantics, styling, and behavior.
 
 
 ### Namespaces
 
-Components should _always_ be assigned a unique namespace prefix.
-
-- The namespace can be as short as a single character, or as long as 5 characters
-- Where possible, the namespace should be a meaningful shorthand
-- In class names, the namespace must be followed by a single dash
-- Views should be treated as individual components
+CSS Modules auto namespace your classes.
 
 Consider the following example, where we assigned `ddl` to a **drop down list** component. Take note of the class names.
 
@@ -146,15 +77,15 @@ Consider the following example, where we assigned `ddl` to a **drop down list** 
 
 ```css
 .ddl-container {
-  // ...
+  …
 }
 
 .ddl-item-list {
-  // ...
+  …
 }
 
 .ddl-item {
-  // ...
+  …
 }
 ```
 
@@ -162,69 +93,19 @@ Consider the following example, where we assigned `ddl` to a **drop down list** 
 
 ```css
 .item-list {
-  // ...
+  …
 }
 
 .dropdown-item-list {
-  // ...
+  …
 }
 
 .xyz-item-list {
-  // ...
+  …
 }
 ```
 
 See [Selectors and Nesting](#selectors-and-nesting) for information in regard to how styles should be overridden
-
-### ComponentName
-
-* The component's name must be written in camel case.
-* As short as possible, but as long as necessary
-  * _Don't abbreviate words carelessly_
-* Name things consistently
-* Meaningful description of the elements that should use it
-
-```css
-.myComponent { /* … */ }
-```
-
-```html
-<article class="myComponent">
-  …
-</article>
-```
-
-
-### componentName--modifierName
-
-A component modifier is a class that modifies the presentation of the base component in some form. Modifier names must be written in camel case and be separated from the component name by two hyphens. The class should be included in the HTML _in addition_ to the base component class.
-
-```css
-/* Core button */
-.btn { /* … */ }
-/* Default button style */
-.btn--default { /* … */ }
-```
-
-```html
-<button class="btn btn--primary">…</button>
-```
-
-### componentName-descendantName
-
-A component descendant is a class that is attached to a descendant node of a component. It's responsible for applying presentation directly to the descendant on behalf of a particular component. Descendant names must be written in camel case.
-
-```html
-<article class="tweet">
-  <header class="tweet-header">
-    <img class="tweet-avatar" src="{$src}" alt="{$alt}">
-    …
-  </header>
-  <div class="tweet-body">
-    …
-  </div>
-</article>
-```
 
 ### aria-*
 
@@ -295,7 +176,7 @@ While the `id` attribute might be fine in HTML and JavaScript, it should be **av
 
 ```css
 .ur-name {
-  // ...
+  …
 }
 ```
 
@@ -303,7 +184,7 @@ While the `id` attribute might be fine in HTML and JavaScript, it should be **av
 
 ```css
 #ur-name {
-  // ...
+  …
 }
 ```
 
@@ -341,17 +222,13 @@ button {
 
 ## Selectors and Nesting
 
-Styles shouldn't need to be nested more than three _(four at worst)_ levels deep. This includes pseudo-selectors. If you find yourself going further, think about re-organizing your rules _(either the specificity needed, or the layout of the nesting)_.
+Styles should never by nested. It breaks isolation, leads to non-deterministic resolution, and leads to specificity wars.
 
 ##### Good
 
 ```css
-.sg-title-icon:before {
-  // ...
-}
-
-.dg-container .sg-title {
-  font-size: 1.1em; // larger segment title inside dialogs
+.sg-title-icon::before {
+  …
 }
 ```
 
@@ -362,65 +239,12 @@ Styles shouldn't need to be nested more than three _(four at worst)_ levels deep
   font-size: 1.1em;
 }
 
-.dg-container .sg-title span:before {
-  // ...
+.dg-container .sg-title span::before {
+  …
 }
 ```
 
-If a component needs to be different within another component, these rules apply.
-
-- Where possible, give a class name using the parent namespace to the child component
-- If that's not possible, then use a nested selector
-
-Suppose you have a User List component `.ul-*` and a User Card component `.uc-*`.
-
-##### Good
-
-```html
-<div class='ul-container'>
-  <div class='uc-container'>
-    <span class='uc-name ul-card-name'>John Doe</span>
-  </div>
-</div>
-```
-
-```css
-.ul-card-name {
-  // ...
-}
-```
-
-##### Okay
-
-```html
-<div class='ul-container'>
-  <div class='uc-container'>
-    <span class='uc-name'>John Doe</span>
-  </div>
-</div>
-```
-
-```css
-.ul-container .uc-name {
-  // ...
-}
-```
-
-##### Bad
-
-```html
-<div class='ul-container'>
-  <div class='uc-container'>
-    <span class='uc-name uc-name-in-ul'>John Doe</span>
-  </div>
-</div>
-```
-
-```css
-.uc-name-in-ul {
-  // ...
-}
-```
+Components should never affect the styles of sub components.
 
 ## Variables
 
@@ -808,13 +632,13 @@ You should shy away from all of these. A few rules apply.
 
 - **Stay away from frameworks**
 - Use [`normalize.css`][4] if you want
-- Vendor styles, such as those required by external components are okay, and they should come before you define any of your own styles
+- Vendor styles, such as those required by external components are okay, and they should come before you define any of your own styles. You'll need to prefix them with `:global`.
 
 ## Languages
 
 Some rules apply to stylesheet, regardless of language.
 
-- Use a pre-processor language where possible. Rework is probably the best.
+- Use a pre-processor language where possible. CSS Modules is probably the best.
 - Use soft-tabs with a two space indent
 - One line per selector
 - One _(or more)_ line(s) per property declaration
