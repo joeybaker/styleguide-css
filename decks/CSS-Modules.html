@@ -1,76 +1,78 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8" />
-		<title>CSS-Modules.md</title>
-		<style>
-			body {
-	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  <head>
+    <meta charset="utf-8" />
+    <title>CSS-Modules.md</title>
+    <style>
+      body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 h1, h2, h3 {
-	font-weight: 400;
-	margin-bottom: 0;
+  font-weight: 400;
+  margin-bottom: 0;
 }
 .remark-slide-content h1 { font-size: 3em; }
 .remark-slide-content h2 { font-size: 2em; }
 .remark-slide-content h3 { font-size: 1.6em; }
 .footnote {
-	position: absolute;
-	bottom: 3em;
+  position: absolute;
+  bottom: 3em;
 }
 li p { line-height: 1.25em; }
 .red { color: #fa0000; }
 .large { font-size: 2em; }
 a, a > code {
-	color: rgb(249, 38, 114);
-	text-decoration: none;
+  color: rgb(249, 38, 114);
+  text-decoration: none;
 }
 code {
-	background: none repeat scroll 0 0 #F8F8FF;
+  background: none repeat scroll 0 0 #F8F8FF;
   border: 1px solid #DEDEDE;
-  border-radius: 3px 	;
+  border-radius: 3px  ;
   padding: 0 0.2em;
 }
 .remark-code, .remark-inline-code { font-family: "Bitstream Vera Sans Mono", "Courier", monospace; }
 .remark-code-line-highlighted     { background-color: #373832; }
 .pull-left {
-	float: left;
-	width: 47%;
+  float: left;
+  width: 47%;
 }
 .pull-right {
-	float: right;
-	width: 47%;
+  float: right;
+  width: 47%;
 }
 .pull-right ~ p {
-	clear: both;
+  clear: both;
 }
 #slideshow .slide .content code {
-	font-size: 0.8em;
+  font-size: 0.8em;
 }
 #slideshow .slide .content pre code {
-	font-size: 0.9em;
-	padding: 15px;
+  font-size: 0.9em;
+  padding: 15px;
 }
 .main-title, .title {
-	background: #272822;
-	color: #777872;
-	text-shadow: 0 0 20px #333;
+  background: #272822;
+  color: #777872;
+  text-shadow: 0 0 20px #333;
 }
 .title h1, .title h2, .main-title h1, .main-title h2 {
-	color: #f3f3f3;
-	line-height: 0.8em;
+  color: #f3f3f3;
+  line-height: 0.8em;
 }
 /* Custom */
 .remark-code {
-	display: block;
-	padding: 0.5em;
+  display: block;
+  padding: 0.5em;
 }
 
-		</style>
-	</head>
-	<body>
+    </style>
+  </head>
+  <body><script id="__bs_script__">//<![CDATA[
+    document.write("<script async src='/browser-sync/browser-sync-client.2.13.0.js'><\/script>".replace("HOST", location.hostname));
+//]]></script>
 
-		<textarea id="source">
+    <textarea id="source">
 class: center, middle, main-title
 
 # [![CSS Modules](https://raw.githubusercontent.com/css-modules/logos/master/css-modules-logo.png)](http://glenmaddern.com/articles/css-modules)
@@ -124,6 +126,13 @@ Importing the CSS in the JS ensures you don&#39;t have massive `index` files tha
 
 
 ---
+### Enforce Isolation: Think in Components
+
+- Don&#39;t let your parents style their children
+- Don&#39;t use `className` as a prop
+
+
+---
 ### Naming
 We don&#39;t need to worry about namespacing anymore!
 
@@ -154,6 +163,12 @@ We don&#39;t need to worry about namespacing anymore!
 **Do this**
 
 `class=${styles.inProgress}`
+
+
+---
+### Avoid the Cascade: Think in components
+
+- Always style single class names; don&#39;t style tags. This *will* make your CSS easier to reason about.
 
 
 ---
@@ -270,7 +285,7 @@ In Sass,
 ```
 [Why this sucks](http://www.sitepoint.com/avoid-sass-extend/) (besides the bloated CSS).
 
-Namely: Non-deterministic resolution is back!
+Namely: Non-deterministic resolution is back! Or: `@extends` is DRY, but not safe.
 
 
 ---
@@ -421,11 +436,18 @@ Fortunately, `composes` makes this easy.
 - Split out your component into several smaller components that you can compose.
 
 
-		</textarea>
+---
+## Know when to break the rules
+
+- Sometimes you break the rules. But know *why* you&#39;re breaking them and please, please, please: leave a comment in the CSS saying why you&#39;re a special snowflake this one time.
+- The one constraint you should (probably) never break: never style across components.
+
+
+    </textarea>
     <script src="remark.js"></script>
-		<script>
-			var slideshow = remark.create();
-		</script>
-		<script></script>
-	</body>
+    <script>
+      var slideshow = remark.create();
+    </script>
+    <script></script>
+  </body>
 </html>

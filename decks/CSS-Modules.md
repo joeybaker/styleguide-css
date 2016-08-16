@@ -82,6 +82,10 @@ Importing the CSS in the JS ensures you don't have massive `index` files that ch
 
 
 
+### Enforce Isolation: Think in Components
+* Don't let your parents style their children
+* Don't use `className` as a prop
+
 
 
 
@@ -132,7 +136,8 @@ We don't need to worry about namespacing anymore!
 
 
 
-
+### Avoid the Cascade: Think in components
+* Always style single class names; don't style tags. This _will_ make your CSS easier to reason about.
 
 
 
@@ -302,7 +307,7 @@ In Sass,
 
 [Why this sucks](http://www.sitepoint.com/avoid-sass-extend/) (besides the bloated CSS).
 
-Namely: Non-deterministic resolution is back!
+Namely: Non-deterministic resolution is back! Or: `@extends` is DRY, but not safe.
 
 ### Composition == bug free
 
@@ -464,3 +469,7 @@ Fortunately, `composes` makes this easy.
 * Keep the number of properties of your components to a minimum.
 * Represent actual different ways a component can look or behave using properties.
 * Split out your component into several smaller components that you can compose.
+
+## Know when to break the rules
+* Sometimes you break the rules. But know _why_ you're breaking them and please, please, please: leave a comment in the CSS saying why you're a special snowflake this one time.
+* The one constraint you should (probably) never break: never style across components.
