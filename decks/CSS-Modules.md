@@ -219,7 +219,7 @@ Right, but:
 
 
 
-### Follow these constraint!
+### Follow these constraints!
 * [x] global namespace ← _local by default_
 * [x] dependencies ← _import into the JS_
 * [x] dead code elimination ← _possible with a browserify transform_
