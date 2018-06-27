@@ -422,9 +422,11 @@ styles: {
 
 
 <div style="display: none">
+
 #### Gets around the current limitations of CSS 4 variables
 
 Using the current polyfill is limited by forcing all variables to be global, and not allowing them for use in media queries. `@values` solves it.
+
 </div>
 
 
